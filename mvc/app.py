@@ -2,9 +2,7 @@ import os
 from .view import View
 from jinja2 import Environment, FileSystemLoader
 from werkzeug.wrappers import Request
-from werkzeug.exceptions import HTTPException, NotFound
-from werkzeug.wsgi import SharedDataMiddleware
-from werkzeug.utils import redirect
+from werkzeug.exceptions import HTTPException
 
 
 class Application(object):
@@ -34,13 +32,3 @@ class Application(object):
 
     def __call__(self, environ, start_response):
         return self.wsgi_app(environ, start_response)
-
-
-def create_app(root_path, router, with_static=True):
-    app = Application(root_path, router)
-
-    if with_static:
-        app.wsgi_app = SharedDataMiddleware(app.wsgi_app, {
-            '/static':  os.path.join(root_path, 'static')
-        })
-    return app
