@@ -1,6 +1,8 @@
+from .interfaces import RouterInterface, implementer
 from werkzeug.routing import Map
 
 
+@implementer(RouterInterface)
 class Router:
     _registry = []
 
