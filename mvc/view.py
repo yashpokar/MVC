@@ -16,7 +16,7 @@ class View:
     @staticmethod
     def make(template_name, **context):
         view = View.getEngine().get_template(template_name)
-        return Response(view.render(context), mimetype='text/html')
+        return { 'response': view.render(context), 'mimetype': 'text/html' }
 
 
 def view(template_name, **context):

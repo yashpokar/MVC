@@ -1,5 +1,5 @@
-from views import home, user_profile
+from views import user_profile
 from mvc.router import Router
 
-Router.get('/', home)
-Router.post('/profile/<username>', user_profile)
+Router.get('/', 'home_controller.HomeController@index')
+Router.get('/profile/<username>', 'profile_controller.ProfileController@show')
