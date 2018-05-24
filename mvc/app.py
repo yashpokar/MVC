@@ -32,13 +32,6 @@ class Application(object):
     def __call__(self, environ, start_response):
         return self.wsgi_app(environ, start_response)
 
-    # Home Controller
-    def on_home(self, request):
-        return Response('Welcome to the mvc framework')
-
-    def on_user_profile(self, request, username):
-        return Response('Hello %s' % (username))
-
 
 def create_app(redis_host='localhost', redis_port=6379, with_static=True):
     app = Application()
