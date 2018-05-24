@@ -25,7 +25,3 @@ class Router:
     @staticmethod
     def getRules():
         return Map([Rule(pattern, **rule) for pattern, rule in Router._registry.items()])
-
-    @staticmethod
-    def dispatch_request(registry, request):
-        adapter = registry
