@@ -1,21 +1,11 @@
 import os
-from werkzeug.wrappers import Response
 from werkzeug.serving import run_simple
 from mvc.app import create_app
 from mvc.router import Router
-from mvc.view import view
-from werkzeug.routing import Rule
+from routes import home, user_profile
 
-def home(request):
-    return view('home.html')
-
-def user_profile(request, username):
-    return view('profile.html', username=username)
-
-Router.register([
-    Rule('/', endpoint=home),
-    Rule('/profile/<username>', endpoint=user_profile),
-])
+Router.get('/', home)
+Router.post('/profile/<username>', user_profile)
 
 app = create_app(os.path.dirname(__file__), Router)
 

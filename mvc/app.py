@@ -12,13 +12,15 @@ class Application(object):
     _router = None
 
     def __init__(self, root_path, router, config={}):
-        self._router = router.rules()
+        self._router = router
         template_path = os.path.join(root_path, 'templates')
         engine = Environment(loader=FileSystemLoader(template_path), autoescape=True)
         View.setEngine(engine)
 
     def dispatch_request(self, request):
-        adapter = self._router.bind_to_environ(request.environ)
+        adapter = self._router\
+            .rules(request.method)\
+            .bind_to_environ(request.environ)
 
         try:
             endpoint, values = adapter.match()

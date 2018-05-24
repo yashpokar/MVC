@@ -7,7 +7,6 @@ setup(
     install_requires=[
         'Werkzeug',
         'Jinja2',
-        'zope.interface',
     ],
     packages=find_packages(exclude=('tests', 'tests.*')),
     include_package_data=True,
