@@ -6,6 +6,7 @@ setup(
     version='0.0.1',
     install_requires=[
         'Werkzeug',
+        'Jinja2',
     ],
     packages=find_packages(),
 )
