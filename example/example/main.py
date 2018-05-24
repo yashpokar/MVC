@@ -5,7 +5,7 @@ from mvc.router import Router
 from routes import home, user_profile
 
 Router.get('/', home)
-Router.post('/profile/<username>', user_profile)
+Router.get('/profile/<username>', user_profile)
 
 app = create_app(os.path.dirname(__file__), Router)
 

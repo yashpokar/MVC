@@ -1,6 +1,5 @@
 import os
 from .view import View
-from .view import View
 from jinja2 import Environment, FileSystemLoader
 from werkzeug.wrappers import Request
 from werkzeug.exceptions import HTTPException, NotFound
