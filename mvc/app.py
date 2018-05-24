@@ -10,10 +10,19 @@ from jinja2 import Environment, FileSystemLoader
 class Application(object):
 
     def __init__(self, config={}):
-        pass
+        self.url_map = Map([
+            Rule('/', endpoint='home'),
+            Rule('/profile/<username>', endpoint='user_profile'),
+        ])
 
     def dispatch_request(self, request):
-        return Response('Hello World!')
+        adapter = self.url_map.bind_to_environ(request.environ)
+
+        try:
+            endpoint, values = adapter.match()
+            return getattr(self, 'on_' + endpoint)(request, **values)
+        except HTTPException as e:
+            return e
 
     def wsgi_app(self, environ, start_response):
         request = Request(environ)
@@ -22,6 +31,13 @@ class Application(object):
 
     def __call__(self, environ, start_response):
         return self.wsgi_app(environ, start_response)
+
+    # Home Controller
+    def on_home(self, request):
+        return Response('Welcome to the mvc framework')
+
+    def on_user_profile(self, request, username):
+        return Response('Hello %s' % (username))
 
 
 def create_app(redis_host='localhost', redis_port=6379, with_static=True):
