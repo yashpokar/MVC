@@ -23,9 +23,7 @@ class App(object):
 
         try:
             endpoint, values = adapter.match()
-
             callback = Router.getRequestHandler(self._root_path, endpoint)
-
             return Response(callback(request, **values))
         except HTTPException as e:
             return e
