@@ -1,18 +1,12 @@
-import functools
-from werkzeug.routing import Map, Rule
 from werkzeug.exceptions import HTTPException
+from werkzeug.routing import Map, Rule
 
 
 class Router:
     _registry = {
-        'GET': [],
-        'POST': [],
+        'GET': {},
+        'POST': {},
     }
-
-    @staticmethod
-    def rules():
-        # TODO :: The approach over here is very bad
-        return Map(functools.reduce(lambda x, y: x + y, Router._registry.values()))
 
     @staticmethod
     def get(pattern, callback):
@@ -24,4 +18,24 @@ class Router:
 
     @staticmethod
     def _register(method, pattern, callback):
-        return Router._registry[method].append(Rule(pattern, endpoint=callback))
+        Router._registry[method][pattern] = callback
+
+    @staticmethod
+    def getRules():
+        rules = []
+
+        for routes in Router._registry.values():
+            for pattern, callback in routes.items():
+                rules.append(Rule(pattern, endpoint=callback))
+
+        return Map(rules)
+
+    @staticmethod
+    def dispatch_request(registry, request):
+        adapter = registry.bind_to_environ(request.environ)
+
+        try:
+            endpoint, values = adapter.match()
+            return endpoint(request, **values)
+        except HTTPException as e:
+            return e

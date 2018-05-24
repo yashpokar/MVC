@@ -3,7 +3,6 @@ from .view import View
 from .router import Router
 from jinja2 import Environment, FileSystemLoader
 from werkzeug.wrappers import Request
-from werkzeug.exceptions import HTTPException
 from werkzeug.serving import run_simple
 
 
@@ -11,19 +10,13 @@ class App(object):
     _router = None
 
     def __init__(self, root_path, config={}):
-        self._router = Router.rules()
+        self._router = Router.getRules()
         template_path = os.path.join(root_path, 'templates')
         engine = Environment(loader=FileSystemLoader(template_path), autoescape=True)
         View.setEngine(engine)
 
     def dispatch_request(self, request: Request):
-        adapter = self._router.bind_to_environ(request.environ)
-
-        try:
-            endpoint, values = adapter.match()
-            return endpoint(request, **values)
-        except HTTPException as e:
-            return e
+        return Router.dispatch_request(self._router, request)
 
     def wsgi_app(self, environ, start_response):
         request = Request(environ)
