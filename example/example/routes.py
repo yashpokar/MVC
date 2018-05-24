@@ -1,7 +1,5 @@
-from mvc.view import view
+from views import home, user_profile
+from mvc.router import Router
 
-def home(request):
-    return view('home.html')
-
-def user_profile(request, username):
-    return view('profile.html', username=username)
+Router.get('/', home)
+Router.post('/profile/<username>', user_profile)
