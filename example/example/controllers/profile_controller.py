@@ -1,6 +1,6 @@
 from mvc.controller import Controller
 
 
-class AboutController(Controller):
-    def index(self, request):
-        pass
+class ProfileController(Controller):
+    def show(self, request, username):
+        return 'Hello ' + username

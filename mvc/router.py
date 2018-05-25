@@ -1,12 +1,9 @@
-import sys
-from importlib import import_module
 from werkzeug.routing import Map, Rule
 
 
 class Router:
     _registry = {}
     _controllers = {}
-    _controller_namespace = 'controllers.'
 
     @staticmethod
     def get(pattern, callback):
@@ -29,17 +26,3 @@ class Router:
     @staticmethod
     def getRules():
         return Map([Rule(pattern, **rule) for pattern, rule in Router._registry.items()])
-
-    @staticmethod
-    def getRequestHandler(root_path, handler):
-        # TODO :: Do it in a better way
-        sys.path.append(root_path + '/controllers/')
-
-        controller, method = handler.split('@')
-        *controller_namespace, controller_class = controller.split('.')
-
-        if controller not in Router._controllers:
-            module = import_module(Router._controller_namespace + '.'.join(controller_namespace))
-            Router._controllers[controller_class] = getattr(module, controller_class)()
-
-        return getattr(Router._controllers[controller_class], method)
